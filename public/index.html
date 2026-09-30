@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课堂投屏互动系统</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <!-- 16:9 主容器 -->
+    <div class="stage">
+        <!-- 顶部栏 -->
+        <header class="top-bar">
+            <div class="header-left">
+                <span class="logo">课堂投屏互动系统</span>
+            </div>
+            <div class="header-right">
+                <div class="status-badge">
+                    <span class="dot"></span>
+                    <span id="onlineCount">0</span>/6 在线
+                </div>
+                <button class="btn btn-warning" id="clearAllBtn">清空内容</button>
+                <button class="btn btn-primary" id="fullscreenBtn">全屏投影</button>
+            </div>
+        </header>
+
+        <!-- 主体：左二维码 + 右6卡位 -->
+        <main class="main-area">
+            <!-- 左侧二维码区 -->
+            <aside class="qr-section">
+                <h2 class="section-title">扫码投屏</h2>
+                <div class="qr-wrapper">
+                    <img id="qrCode" alt="二维码" />
+                    <div class="qr-loading">二维码生成中...</div>
+                </div>
+                <div class="qr-url-box">
+                    <label>学生端网址</label>
+                    <div class="url-display" id="studentUrl">加载中...</div>
+                </div>
+                <div class="qr-tips">
+                    <p>1. 手机连接互联网</p>
+                    <p>2. 扫码进入学生投屏页</p>
+                    <p>3. 上传文字或图片即可投屏</p>
+                    <p>4. 最多6人同时在线</p>
+                </div>
+            </aside>
+
+            <!-- 右侧6个学员卡位 -->
+            <section class="slots-section">
+                <div class="slots-header">
+                    <h2 class="section-title">学员投屏卡位</h2>
+                    <span class="slots-info" id="slotsInfo">0/6 已占用</span>
+                </div>
+                <div class="slots-grid" id="slotsGrid">
+                    <!-- 6个卡位由JS动态生成 -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 全屏投影模式 -->
+    <div class="projection-mode" id="projectionMode">
+        <button class="exit-projection" id="exitProjectionBtn">退出全屏投影</button>
+        <div class="projection-grid" id="projectionGrid"></div>
+    </div>
+
+    <!-- 双击放大查看模态框 -->
+    <div class="viewer-modal" id="viewerModal">
+        <div class="viewer-backdrop" id="viewerBackdrop"></div>
+        <div class="viewer-content" id="viewerContent">
+            <button class="viewer-close" id="viewerClose">✕</button>
+            <div class="viewer-header" id="viewerHeader"></div>
+            <div class="viewer-body" id="viewerBody"></div>
+        </div>
+    </div>
+
+    <!-- 提示消息 -->
+    <div class="toast" id="toast"></div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

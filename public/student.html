@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>投屏 - 课堂互动</title>
+    <link rel="stylesheet" href="/css/student.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="phone-wrapper">
+        <!-- ===== 登录界面 ===== -->
+        <div class="login-screen" id="loginScreen">
+            <div class="login-card">
+                <div class="login-icon">📡</div>
+                <h1 class="login-title">课堂投屏</h1>
+                <p class="login-subtitle">请输入你的姓名进入课堂</p>
+
+                <div class="login-form">
+                    <input type="text" id="loginNameInput" class="login-input" placeholder="请输入姓名" maxlength="20" autocomplete="off">
+                    <button class="login-btn" id="loginBtn" disabled>
+                        <span>进入课堂</span>
+                        <span class="login-btn-icon">➤</span>
+                    </button>
+                </div>
+
+                <div class="login-status" id="loginStatus"></div>
+                <div class="login-tip">最多6人同时在线，先到先得</div>
+            </div>
+        </div>
+
+        <!-- ===== 满员提示界面 ===== -->
+        <div class="full-notice" id="fullNotice" style="display:none;">
+            <div class="full-icon">😢</div>
+            <p>当前已满6人</p>
+            <p class="full-sub">请稍后再试</p>
+        </div>
+
+        <!-- ===== 投屏主界面（登录后显示） ===== -->
+        <div class="main-content" id="mainContent" style="display:none;">
+            <!-- 顶部 -->
+            <header class="phone-header">
+                <div class="header-title">
+                    <span class="header-icon">📡</span>
+                    <span>课堂投屏</span>
+                </div>
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot connecting"></span>
+                    <span class="status-text">连接中...</span>
+                </div>
+            </header>
+
+            <!-- 当前用户信息 -->
+            <div class="user-bar">
+                <span class="user-label">当前用户：</span>
+                <span class="user-name" id="userNameDisplay">-</span>
+                <span class="user-slot" id="userSlotDisplay"></span>
+            </div>
+
+            <!-- 文字框（上） -->
+            <div class="input-block text-block">
+                <div class="block-label">
+                    <span class="block-icon">📝</span>
+                    <span>文字内容</span>
+                </div>
+                <textarea id="textInput" class="text-area" placeholder="在此输入要投屏的文字内容..." maxlength="500" rows="4"></textarea>
+                <div class="char-count"><span id="charCount">0</span>/500</div>
+            </div>
+
+            <!-- 图片框（下） -->
+            <div class="input-block image-block">
+                <div class="block-label">
+                    <span class="block-icon">🖼️</span>
+                    <span>图片内容</span>
+                    <span class="block-hint">（可选）</span>
+                </div>
+                <div class="image-area" id="imageArea">
+                    <div class="image-placeholder" id="imagePlaceholder">
+                        <span class="placeholder-icon">📷</span>
+                        <p>点击选择图片</p>
+                        <p class="placeholder-sub">支持拍照或相册选择</p>
+                    </div>
+                    <img id="imagePreview" class="image-preview" style="display:none;" alt="预览">
+                    <input type="file" accept="image/*" id="imageInput" hidden>
+                    <button class="image-remove" id="imageRemoveBtn" style="display:none;">✕</button>
+                </div>
+                <div class="image-actions">
+                    <button class="img-btn camera-btn" id="cameraBtn">📷 拍照</button>
+                    <button class="img-btn album-btn" id="albumBtn">🖼️ 相册</button>
+                </div>
+            </div>
+
+            <!-- 发送按钮（最下面） -->
+            <button class="send-btn" id="sendBtn" disabled>
+                <span>发送投屏</span>
+                <span class="send-icon">➤</span>
+            </button>
+
+            <!-- 清空我的内容 -->
+            <button class="clear-my-btn" id="clearMyBtn">清空我的投屏内容</button>
+        </div>
+
+        <!-- 上传进度 -->
+        <div class="upload-progress" id="uploadProgress" style="display:none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">发送中...</div>
+        </div>
+    </div>
+
+    <!-- 提示消息 -->
+    <div class="toast" id="toast"></div>
+
+    <script src="/js/student.js"></script>
+</body>
+</html>
